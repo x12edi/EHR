@@ -1,0 +1,20 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/src/.vs
+/src/EHR.API/bin/Debug/net9.0
+/src/EHR.API/obj
+/src/EHR.Application/bin/Debug/net9.0
+/src/EHR.Application/obj
+/src/EHR.Domain/bin/Debug/net9.0
+/src/EHR.Domain/obj
+/src/EHR.IdentityServer/bin/Debug/net9.0
+/src/EHR.IdentityServer/obj
+/src/EHR.Infrastructure/bin/Debug/net9.0
+/src/EHR.Infrastructure/obj
+/src/EHR.IntegrationTests/bin/Debug/net9.0
+/src/EHR.IntegrationTests/obj
+/src/EHR.UnitTests/bin/Debug/net9.0
+/src/EHR.UnitTests/obj

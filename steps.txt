@@ -1,0 +1,87 @@
+# Create the main solution
+dotnet new sln -n EHR
+
+# Domain Layer
+dotnet new classlib -n EHR.Domain
+dotnet sln add EHR.Domain/EHR.Domain.csproj
+
+# Application Layer
+dotnet new classlib -n EHR.Application
+dotnet sln add EHR.Application/EHR.Application.csproj
+
+# Infrastructure Layer
+dotnet new classlib -n EHR.Infrastructure
+dotnet sln add EHR.Infrastructure/EHR.Infrastructure.csproj
+
+# API Layer
+dotnet new webapi -n EHR.API
+dotnet sln add EHR.API/EHR.API.csproj
+
+# IdentityServer (Authorization Server)
+dotnet new web -n EHR.IdentityServer
+dotnet sln add EHR.IdentityServer/EHR.IdentityServer.csproj
+
+# Test Projects
+dotnet new xunit -n EHR.UnitTests
+dotnet sln add EHR.UnitTests/EHR.UnitTests.csproj
+
+dotnet new xunit -n EHR.IntegrationTests
+dotnet sln add EHR.IntegrationTests/EHR.IntegrationTests.csproj
+
+
+
+/src
+  /EHR.Api                -> Controllers, Program.cs, Startup-style config
+  /EHR.Application        -> Services, DTOs, interfaces for application layer
+  /EHR.Domain             -> Entities, ValueObjects, Enums
+  /EHR.Infrastructure     -> EF Core DbContext, Migrations, Repositories, Mappings
+  /EHR.Identity           -> (IdentityServer project - will integrate later)
+  /Tests                  -> Unit & Integration tests
+
+# Application depends on Domain
+dotnet add EHR.Application/EHR.Application.csproj reference EHR.Domain/EHR.Domain.csproj
+
+# Infrastructure depends on Application + Domain
+dotnet add EHR.Infrastructure/EHR.Infrastructure.csproj reference EHR.Application/EHR.Application.csproj
+dotnet add EHR.Infrastructure/EHR.Infrastructure.csproj reference EHR.Domain/EHR.Domain.csproj
+
+# API depends on Application + Infrastructure
+dotnet add EHR.API/EHR.API.csproj reference EHR.Application/EHR.Application.csproj
+dotnet add EHR.API/EHR.API.csproj reference EHR.Infrastructure/EHR.Infrastructure.csproj
+
+# IdentityServer depends on Infrastructure + Application
+dotnet add EHR.IdentityServer/EHR.IdentityServer.csproj reference EHR.Infrastructure/EHR.Infrastructure.csproj
+dotnet add EHR.IdentityServer/EHR.IdentityServer.csproj reference EHR.Application/EHR.Application.csproj
+
+--------------------
+
+dotnet add EHR.Infrastructure package Microsoft.EntityFrameworkCore
+dotnet add EHR.Infrastructure package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add EHR.Infrastructure package Microsoft.EntityFrameworkCore.Design
+dotnet add EHR.Infrastructure package Microsoft.EntityFrameworkCore.Tools
+dotnet add EHR.Infrastructure package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+dotnet add EHR.Infrastructure package Microsoft.Extensions.Configuration.Binder
+dotnet add EHR.Infrastructure package Microsoft.AspNetCore.SignalR
+
+------------
+dotnet add EHR.API package Swashbuckle.AspNetCore
+dotnet add EHR.API package Microsoft.AspNetCore.Authentication.JwtBearer
+dotnet add EHR.API package Microsoft.AspNetCore.SignalR
+---------------
+dotnet add EHR.IdentityServer package Duende.IdentityServer
+dotnet add EHR.IdentityServer package Duende.IdentityServer.EntityFramework
+dotnet add EHR.IdentityServer package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+dotnet add EHR.IdentityServer package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add EHR.IdentityServer package Microsoft.EntityFrameworkCore.Tools
+--------------
+dotnet add EHR.Application package FluentValidation
+dotnet add EHR.Application package AutoMapper
+dotnet add EHR.Application package MediatR.Extensions.Microsoft.DependencyInjection
+----------------
+dotnet add EHR.UnitTests package Moq
+dotnet add EHR.UnitTests package FluentAssertions
+dotnet add EHR.IntegrationTests package Microsoft.AspNetCore.Mvc.Testing
+
+
+
+

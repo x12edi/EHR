@@ -1,0 +1,156 @@
+Table Patients {
+  Id int [pk]
+  MRN nvarchar
+  FirstName nvarchar
+  LastName nvarchar
+  DOB datetime
+}
+
+Table PatientIdentifiers {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+}
+
+Table Contacts {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+}
+
+Table Users {
+  Id int [pk]
+}
+
+Table ClinicianProfiles {
+  Id int [pk]
+  UserId int [ref: > Users.Id]
+  DepartmentId int [ref: > Departments.Id]
+}
+
+Table Departments {
+  Id int [pk]
+}
+
+Table Locations {
+  Id int [pk]
+}
+
+Table Encounters {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+  LocationId int [ref: > Locations.Id]
+  DepartmentId int [ref: > Departments.Id]
+  PrimaryProviderId int [ref: > Users.Id]
+}
+
+Table EncounterParticipants {
+  Id int [pk]
+  EncounterId int [ref: > Encounters.Id]
+  UserId int [ref: > Users.Id]
+}
+
+Table ClinicalNotes {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+  AuthorId int [ref: > Users.Id]
+}
+
+Table Problems {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+}
+
+Table Allergies {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+}
+
+Table MedicationRequests {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+  PrescriberId int [ref: > Users.Id]
+}
+
+Table MedicationAdministrations {
+  Id int [pk]
+  MedicationRequestId int [ref: > MedicationRequests.Id]
+  AdministeredById int [ref: > Users.Id]
+}
+
+Table Orders {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+  EncounterId int [ref: > Encounters.Id]
+  OrderedById int [ref: > Users.Id]
+}
+
+Table LabResults {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+}
+
+Table DiagnosticReports {
+  Id int [pk]
+}
+
+Table Appointments {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+  ProviderId int [ref: > Users.Id]
+}
+
+Table ScheduleSlots {
+  Id int [pk]
+  ProviderId int [ref: > Users.Id]
+}
+
+Table BillingRecords {
+  Id int [pk]
+  PatientId int [ref: > Patients.Id]
+  EncounterId int [ref: > Encounters.Id]
+}
+
+Table FileReferences {
+  Id int [pk]
+}
+
+Table ImagingReferences {
+  Id int [pk]
+  EncounterId int [ref: > Encounters.Id]
+}
+
+Table AuditLogs {
+  Id int [pk]
+}
+
+Table AuditAccessLogs {
+  Id int [pk]
+  UserId int [ref: > Users.Id]
+  PatientId int [ref: > Patients.Id]
+}
+
+Table Notifications {
+  Id int [pk]
+  RecipientUserId int [ref: > Users.Id]
+}
+
+Table CodeSets {
+  Id int [pk]
+}
+
+Table CodeSetItems {
+  Id int [pk]
+  CodeSetId int [ref: > CodeSets.Id]
+}
+
+Table OutboxEvents {
+  Id int [pk]
+}
+
+Table RefreshTokens {
+  Id int [pk]
+  UserId int [ref: > Users.Id]
+}
+
+Table Tenants {
+  Id int [pk]
+}
