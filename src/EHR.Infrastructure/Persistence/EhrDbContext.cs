@@ -225,6 +225,17 @@ namespace EHR.Infrastructure.Persistence
                 b.HasKey(lr => lr.Id);
                 b.HasIndex(lr => new { lr.PatientId, lr.TestCode, lr.ResultedAt });
                 b.Property(lr => lr.RawJson).HasColumnType("nvarchar(max)");
+
+                // IMPORTANT: avoid cascade delete here — use Restrict so SQL Server won't detect multiple cascade paths
+                b.HasOne(lr => lr.Patient)
+                 .WithMany(p => p.LabResults)   // ensure Patient has this collection
+                 .HasForeignKey(lr => lr.PatientId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                b.HasOne(lr => lr.Order)
+                 .WithMany(o => o.LabResults)
+                 .HasForeignKey(lr => lr.OrderId)
+                 .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<DiagnosticReport>(b =>
@@ -256,6 +267,7 @@ namespace EHR.Infrastructure.Persistence
             {
                 b.ToTable("BillingRecords");
                 b.HasKey(bi => bi.Id);
+                b.Property(bi => bi.Amount).HasColumnType("decimal(18,2)"); // explicit precision
                 b.HasOne(bi => bi.Patient).WithMany().HasForeignKey(bi => bi.PatientId).OnDelete(DeleteBehavior.Restrict);
                 b.HasOne(bi => bi.Encounter).WithMany().HasForeignKey(bi => bi.EncounterId).OnDelete(DeleteBehavior.Restrict);
             });

@@ -7,7 +7,7 @@ namespace EHR.Domain.Entities
     public class AuditLog
     {
         public long Id { get; set; } // bigint identity
-        public string UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string ActionType { get; set; }  // create/read/update/delete
         public string EntityType { get; set; }
         public string EntityId { get; set; }

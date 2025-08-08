@@ -6,7 +6,7 @@ namespace EHR.Domain.Entities
 {
     public class Notification : AuditableEntity
     {
-        public string RecipientUserId { get; set; }
+        public Guid? RecipientUserId { get; set; }
         public string Title { get; set; }
         public string Message { get; set; }
         public string PayloadJson { get; set; }

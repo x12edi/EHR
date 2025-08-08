@@ -6,7 +6,7 @@ namespace EHR.Domain.Entities
     public class RefreshToken
     {
         public long Id { get; set; }
-        public string UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string TokenHash { get; set; }
         public DateTimeOffset ExpiresAt { get; set; }
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;

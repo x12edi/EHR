@@ -32,7 +32,7 @@ namespace EHR.Domain.Entities
         public ICollection<MedicationRequest> MedicationRequests { get; set; }
         public ICollection<Appointment> Appointments { get; set; }
         public ICollection<FileReference> Files { get; set; }
-
         public ICollection<ClinicalNote> ClinicalNotes { get; set; }
+        public ICollection<LabResult> LabResults { get; set; }
     }
 }

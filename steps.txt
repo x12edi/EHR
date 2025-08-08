@@ -81,6 +81,25 @@ dotnet add EHR.Application package MediatR.Extensions.Microsoft.DependencyInject
 dotnet add EHR.UnitTests package Moq
 dotnet add EHR.UnitTests package FluentAssertions
 dotnet add EHR.IntegrationTests package Microsoft.AspNetCore.Mvc.Testing
+-------------------
+dotnet tool install --global dotnet-ef
+dotnet add EHR.API package Microsoft.EntityFrameworkCore.Design
+
+dotnet ef migrations add InitialEhrSchema -p EHR.Infrastructure -s EHR.API --output-dir Migrations
+	--> if error remove first --> dotnet ef migrations remove -p EHR.Infrastructure -s EHR.API
+dotnet ef database update -p EHR.Infrastructure -s EHR.API
+	--> if error remove first --> dotnet ef database update <InitialEhrSchema>
+-----------------------
+Generate the schema SQL: 
+dotnet ef migrations script -p EHR.Infrastructure -s EHR.API --output schema.sql
+
+This will create a file schema.sql containing the full SQL script that EF applied to your database.
+-----------------------
+
+
+
+
+
 
 
 

@@ -1,156 +1,198 @@
 Table Patients {
-  Id int [pk]
-  MRN nvarchar
-  FirstName nvarchar
-  LastName nvarchar
+  Id uuid [pk]
+  MRN varchar
+  FirstName varchar
+  LastName varchar
   DOB datetime
+  Gender varchar
+  PrimaryPhone varchar
+  Email varchar
+  CreatedAt datetime
 }
 
 Table PatientIdentifiers {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  IdentifierType varchar
+  Value varchar
 }
 
 Table Contacts {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  Name varchar
+  Relationship varchar
 }
 
 Table Users {
-  Id int [pk]
+  Id uuid [pk]
+  Username varchar
+  Email varchar
+  DisplayName varchar
 }
 
 Table ClinicianProfiles {
-  Id int [pk]
-  UserId int [ref: > Users.Id]
-  DepartmentId int [ref: > Departments.Id]
+  Id uuid [pk]
+  UserId uuid [ref: > Users.Id]
+  DepartmentId uuid [ref: > Departments.Id]
+  NPI varchar
 }
 
 Table Departments {
-  Id int [pk]
+  Id uuid [pk]
+  Name varchar
 }
 
 Table Locations {
-  Id int [pk]
+  Id uuid [pk]
+  Name varchar
 }
 
 Table Encounters {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
-  LocationId int [ref: > Locations.Id]
-  DepartmentId int [ref: > Departments.Id]
-  PrimaryProviderId int [ref: > Users.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  LocationId uuid [ref: > Locations.Id]
+  DepartmentId uuid [ref: > Departments.Id]
+  PrimaryProviderId uuid [ref: > Users.Id]
+  StartAt datetime
+  EndAt datetime
 }
 
 Table EncounterParticipants {
-  Id int [pk]
-  EncounterId int [ref: > Encounters.Id]
-  UserId int [ref: > Users.Id]
+  Id uuid [pk]
+  EncounterId uuid [ref: > Encounters.Id]
+  UserId uuid [ref: > Users.Id]
 }
 
 Table ClinicalNotes {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
-  AuthorId int [ref: > Users.Id]
+  Id uuid [pk]
+  EncounterId uuid [ref: > Encounters.Id]
+  PatientId uuid [ref: > Patients.Id]
+  AuthorId uuid [ref: > Users.Id]
+  SignedAt datetime
 }
 
 Table Problems {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  Code varchar
 }
 
 Table Allergies {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  SubstanceText varchar
 }
 
 Table MedicationRequests {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
-  PrescriberId int [ref: > Users.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  PrescriberId uuid [ref: > Users.Id]
 }
 
 Table MedicationAdministrations {
-  Id int [pk]
-  MedicationRequestId int [ref: > MedicationRequests.Id]
-  AdministeredById int [ref: > Users.Id]
+  Id uuid [pk]
+  MedicationRequestId uuid [ref: > MedicationRequests.Id]
+  AdministeredById uuid [ref: > Users.Id]
 }
 
 Table Orders {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
-  EncounterId int [ref: > Encounters.Id]
-  OrderedById int [ref: > Users.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  EncounterId uuid [ref: > Encounters.Id]
+  OrderedById uuid [ref: > Users.Id]
 }
 
 Table LabResults {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
+  Id uuid [pk]
+  OrderId uuid [ref: > Orders.Id]
+  PatientId uuid [ref: > Patients.Id]
 }
 
 Table DiagnosticReports {
-  Id int [pk]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  OrderId uuid [ref: > Orders.Id]
 }
 
 Table Appointments {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
-  ProviderId int [ref: > Users.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  ProviderId uuid [ref: > Users.Id]
+  DepartmentId uuid [ref: > Departments.Id]
+  StartAt datetime
 }
 
 Table ScheduleSlots {
-  Id int [pk]
-  ProviderId int [ref: > Users.Id]
+  Id uuid [pk]
+  ProviderId uuid [ref: > Users.Id]
+  StartAt datetime
 }
 
 Table BillingRecords {
-  Id int [pk]
-  PatientId int [ref: > Patients.Id]
-  EncounterId int [ref: > Encounters.Id]
+  Id uuid [pk]
+  PatientId uuid [ref: > Patients.Id]
+  EncounterId uuid [ref: > Encounters.Id]
+  Amount decimal
 }
 
 Table FileReferences {
-  Id int [pk]
+  Id uuid [pk]
+  EntityType varchar
+  EntityId uuid
+  FileName varchar
 }
 
 Table ImagingReferences {
-  Id int [pk]
-  EncounterId int [ref: > Encounters.Id]
+  Id uuid [pk]
+  EncounterId uuid [ref: > Encounters.Id]
+  PatientId uuid [ref: > Patients.Id]
+  StudyInstanceUID varchar
 }
 
 Table AuditLogs {
-  Id int [pk]
+  Id bigint [pk]
+  UserId varchar
+  EntityType varchar
+  EntityId varchar
+  Timestamp datetime
 }
 
 Table AuditAccessLogs {
-  Id int [pk]
-  UserId int [ref: > Users.Id]
-  PatientId int [ref: > Patients.Id]
+  Id bigint [pk]
+  UserId varchar
+  PatientId uuid [ref: > Patients.Id]
+  Timestamp datetime
 }
 
 Table Notifications {
-  Id int [pk]
-  RecipientUserId int [ref: > Users.Id]
+  Id uuid [pk]
+  RecipientUserId uuid [ref: > Users.Id]
+  Title varchar
 }
 
 Table CodeSets {
-  Id int [pk]
+  Id uuid [pk]
+  Name varchar
 }
 
 Table CodeSetItems {
-  Id int [pk]
-  CodeSetId int [ref: > CodeSets.Id]
+  Id uuid [pk]
+  CodeSetId uuid [ref: > CodeSets.Id]
+  ItemCode varchar
 }
 
 Table OutboxEvents {
-  Id int [pk]
+  Id bigint [pk]
+  EventType varchar
 }
 
 Table RefreshTokens {
-  Id int [pk]
-  UserId int [ref: > Users.Id]
+  Id bigint [pk]
+  UserId varchar [ref: > Users.Id]
 }
 
 Table Tenants {
-  Id int [pk]
+  Id uuid [pk]
+  Name varchar
 }
