@@ -1,5 +1,6 @@
 using EHR.API.Extensions;
 using EHR.Infrastructure.Persistence;
+using EHR.Infrastructure.SeedData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -66,6 +67,13 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<EhrDbContext>();
+    //context.Database.Migrate();
+    DbInitializer.Seed(context);
 }
 
 app.UseHttpsRedirection();

@@ -15,15 +15,15 @@ namespace EHR.Domain.Entities
         public string FullNameNormalized { get; set; }  // computed/normalized for search
         public DateTime? DOB { get; set; }
         public string Gender { get; set; }              // consider enum
-        public string PrimaryPhone { get; set; }
-        public string Email { get; set; }
-        public string PrimaryLanguage { get; set; }
-        public string PhotoUrl { get; set; }
+        public string? PrimaryPhone { get; set; }
+        public string? Email { get; set; }
+        public string? PrimaryLanguage { get; set; }
+        public string? PhotoUrl { get; set; }
 
         // Flexible details stored as JSON in DB
-        public string AddressesJson { get; set; }
-        public string IdentifiersJson { get; set; }     // passports, national id, etc
-        public string DemographicsJson { get; set; }    // other structured details
+        public string? AddressesJson { get; set; }
+        public string? IdentifiersJson { get; set; }     // passports, national id, etc
+        public string? DemographicsJson { get; set; }    // other structured details
 
         // navigation
         public ICollection<Encounter> Encounters { get; set; }

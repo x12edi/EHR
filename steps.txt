@@ -95,6 +95,9 @@ dotnet ef migrations script -p EHR.Infrastructure -s EHR.API --output schema.sql
 
 This will create a file schema.sql containing the full SQL script that EF applied to your database.
 -----------------------
+dotnet ef migrations add MakeAuditNullable -p EHR.Infrastructure -s EHR.API
+dotnet ef database update -p EHR.Infrastructure -s EHR.API
+
 
 
 

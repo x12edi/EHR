@@ -11,9 +11,9 @@ namespace EHR.Domain.Entities
         public string Email { get; set; }
         public string DisplayName { get; set; }
         public bool IsSystemAccount { get; set; }
-        public string Locale { get; set; }
-        public string TimeZone { get; set; }
-        public string ProfileJson { get; set; } // extra profile info
+        public string? Locale { get; set; }
+        public string? TimeZone { get; set; }
+        public string? ProfileJson { get; set; } // extra profile info
 
         // navigation
         public ClinicianProfile ClinicianProfile { get; set; }
