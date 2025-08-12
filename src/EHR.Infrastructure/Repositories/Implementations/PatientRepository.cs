@@ -11,6 +11,7 @@ namespace EHR.Infrastructure.Repositories.Implementations
 
         public async Task<Patient?> GetByMrnAsync(string mrn)
         {
+            if (string.IsNullOrWhiteSpace(mrn)) return null;
             return await _dbSet.FirstOrDefaultAsync(p => p.MRN == mrn);
         }
     }

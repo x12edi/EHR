@@ -1,5 +1,7 @@
 using EHR.API.Extensions;
 using EHR.Infrastructure.Persistence;
+using EHR.Infrastructure.Repositories.Implementations;
+using EHR.Infrastructure.Repositories.Interfaces;
 using EHR.Infrastructure.SeedData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -15,6 +17,42 @@ builder.Services.AddDbContext<EhrDbContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                          sql => sql.EnableRetryOnFailure())
 );
+
+// Generic + specific repositories
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IPatientRepository, PatientRepository>();
+builder.Services.AddScoped<IEncounterRepository, EncounterRepository>();
+builder.Services.AddScoped<IEncounterParticipantRepository, EncounterParticipantRepository>();
+builder.Services.AddScoped<IClinicalNoteRepository, ClinicalNoteRepository>();
+builder.Services.AddScoped<IProblemRepository, ProblemRepository>();
+builder.Services.AddScoped<IAllergyRepository, AllergyRepository>();
+builder.Services.AddScoped<IMedicationRequestRepository, MedicationRequestRepository>();
+builder.Services.AddScoped<IMedicationAdministrationRepository, MedicationAdministrationRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ILabResultRepository, LabResultRepository>();
+builder.Services.AddScoped<IDiagnosticReportRepository, DiagnosticReportRepository>();
+builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IScheduleSlotRepository, ScheduleSlotRepository>();
+builder.Services.AddScoped<IBillingRecordRepository, BillingRecordRepository>();
+builder.Services.AddScoped<IFileReferenceRepository, FileReferenceRepository>();
+builder.Services.AddScoped<IImagingReferenceRepository, ImagingReferenceRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IClinicianProfileRepository, ClinicianProfileRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+builder.Services.AddScoped<ICodeSetRepository, CodeSetRepository>();
+builder.Services.AddScoped<ICodeSetItemRepository, CodeSetItemRepository>();
+builder.Services.AddScoped<IOutboxEventRepository, OutboxEventRepository>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<ITenantRepository, TenantRepository>();
+builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+builder.Services.AddScoped<IAuditAccessLogRepository, AuditAccessLogRepository>();
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IPatientIdentifierRepository, PatientIdentifierRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
+
+// Unit of Work
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // Add controllers & JSON options
 builder.Services.AddControllers()

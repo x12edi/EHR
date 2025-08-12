@@ -7,6 +7,8 @@ namespace EHR.Domain.Entities
     // Maps to IdentityServer / AspNetUsers row; keep profile extension here
     public class User : AuditableEntity
     {
+        public string SubjectId { get; set; }  // maps to IdentityServer / Auth0 / Okta ID
+
         public string Username { get; set; }
         public string Email { get; set; }
         public string DisplayName { get; set; }

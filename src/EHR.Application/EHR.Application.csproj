@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EHR.Domain\EHR.Domain.csproj" />
+    <ProjectReference Include="..\EHR.Infrastructure\EHR.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
