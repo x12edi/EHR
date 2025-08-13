@@ -18,3 +18,4 @@
 /src/EHR.IntegrationTests/obj
 /src/EHR.UnitTests/bin/Debug/net9.0
 /src/EHR.UnitTests/obj
+/src/ehr-ui/.vs

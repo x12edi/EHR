@@ -4,7 +4,9 @@ using EHR.Infrastructure.Repositories.Implementations;
 using EHR.Infrastructure.Repositories.Interfaces;
 using EHR.Infrastructure.SeedData;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,13 +62,36 @@ builder.Services.AddControllers()
         opt.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
-// Authentication & Authorization placeholders (IdentityServer to be connected later)
+// CORS for frontend
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() ?? new[] { "http://localhost:5173" };
+builder.Services.AddCors(opts =>
+{
+    opts.AddPolicy("frontend", p =>
+        p.WithOrigins(allowedOrigins)
+         .AllowAnyHeader()
+         .AllowAnyMethod());
+});
+
+// JWT auth
+var jwt = builder.Configuration.GetSection("Jwt");
+var issuer = jwt["EHR.Identity"]; //jwt["Issuer"];
+var audience = jwt["EHR.Clients"]; //jwt["Audience"];
+var key = jwt["SigningKey"];
+
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
-        options.Authority = configuration["IdentityServer:Authority"]; // set later
-        options.Audience = "ehr.api";
-        options.RequireHttpsMetadata = env.IsProduction();
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)),
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.FromSeconds(30)
+        };
     });
 
 builder.Services.AddAuthorization();
@@ -115,7 +140,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 

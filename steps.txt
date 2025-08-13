@@ -97,6 +97,19 @@ This will create a file schema.sql containing the full SQL script that EF applie
 -----------------------
 dotnet ef migrations add MakeAuditNullable -p EHR.Infrastructure -s EHR.API
 dotnet ef database update -p EHR.Infrastructure -s EHR.API
+-------------------------------
+dotnet add EHR.IdentityServer package Microsoft.AspNetCore.Identity.UI
+dotnet ef migrations add IdentitySchema -c ApplicationDbContext -o Data/Migrations
+dotnet ef database update -c ApplicationDbContext
+dotnet remove EHR.IdentityServer package Microsoft.AspNetCore.ApiAuthorization.IdentityServer
+dotnet add EHR.IdentityServer package Microsoft.AspNetCore.Authentication.JwtBearer
+
+------------------
+# Create React + TypeScript + Vite project
+npm create vite@latest ehr-ui --template react-ts
+
+cd ehr-ui
+npm install antd axios react-router-dom
 
 
 
