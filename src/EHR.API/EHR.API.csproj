@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.2.0" />
@@ -20,6 +23,10 @@
   <ItemGroup>
     <ProjectReference Include="..\EHR.Application\EHR.Application.csproj" />
     <ProjectReference Include="..\EHR.Infrastructure\EHR.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="uploads\" />
   </ItemGroup>
 
 </Project>

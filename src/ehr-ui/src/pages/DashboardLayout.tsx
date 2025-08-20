@@ -1,11 +1,11 @@
-import React from 'react';
+﻿import React from 'react';
 import { Layout, Menu, Button, Typography } from 'antd';
 import { useAuth } from '../auth/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 
 const { Header, Sider, Content } = Layout;
 
-export default function Dashboard() {
+export default function DashboardLayout() {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -26,24 +26,15 @@ export default function Dashboard() {
                     ]}
                 />
             </Sider>
+
             <Layout>
-                <Header
-                    style={{
-                        background: '#fff',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        padding: '0 16px',
-                    }}
-                >
+                <Header style={{ background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 16px' }}>
                     <Typography.Text>Welcome, {user?.username}</Typography.Text>
                     <Button onClick={logout}>Logout</Button>
                 </Header>
+
                 <Content style={{ margin: 16 }}>
-                    <Typography.Title level={3}>Dashboard</Typography.Title>
-                    <Typography.Paragraph>
-                        This is a protected page. Use the side menu to open Patients and other modules.
-                    </Typography.Paragraph>
+                    <Outlet /> {/* Patients/Appointments/Dashboard content appears here */}
                 </Content>
             </Layout>
         </Layout>

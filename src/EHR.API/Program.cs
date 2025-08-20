@@ -1,9 +1,16 @@
+using AutoMapper;
 using EHR.API.Extensions;
+using EHR.Application.Mappings;
+//using AutoMapper.Extensions.Microsoft.DependencyInjection;
+using EHR.Application.Mappings; // for your PatientProfile
+using EHR.Application.Services;
 using EHR.Infrastructure.Persistence;
 using EHR.Infrastructure.Repositories.Implementations;
 using EHR.Infrastructure.Repositories.Interfaces;
 using EHR.Infrastructure.SeedData;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -19,6 +26,10 @@ builder.Services.AddDbContext<EhrDbContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                          sql => sql.EnableRetryOnFailure())
 );
+
+builder.Services.AddAutoMapper(typeof(PatientProfile).Assembly);
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IPatientService, PatientService>();
 
 // Generic + specific repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -53,6 +64,8 @@ builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IPatientIdentifierRepository, PatientIdentifierRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 
+
+
 // Unit of Work
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -74,13 +87,14 @@ builder.Services.AddCors(opts =>
 
 // JWT auth
 var jwt = builder.Configuration.GetSection("Jwt");
-var issuer = jwt["EHR.Identity"]; //jwt["Issuer"];
-var audience = jwt["EHR.Clients"]; //jwt["Audience"];
+var issuer = jwt["Issuer"]; //jwt["EHR.Identity"];
+var audience = jwt["Audience"]; //jwt["EHR.Clients"];
 var key = jwt["SigningKey"];
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
+        options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidIssuer = issuer,
@@ -139,7 +153,13 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.Seed(context);
 }
 
-app.UseHttpsRedirection();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "uploads")),
+    RequestPath = "/uploads"
+});
+
+//app.UseHttpsRedirection();
 app.UseCors("frontend");
 app.UseAuthentication();
 app.UseAuthorization();

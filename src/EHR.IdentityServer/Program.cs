@@ -37,6 +37,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer("Bearer", o =>
 {
+    o.MapInboundClaims = false;
     o.TokenValidationParameters = new TokenValidationParameters
     {
         ValidIssuer = jwt.Issuer,
@@ -54,6 +55,37 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+// Seed a default user
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    // Ensure "Admin" role exists
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    // Ensure a default admin user exists
+    var adminUser = await userManager.FindByNameAsync("admin");
+    if (adminUser == null)
+    {
+        adminUser = new ApplicationUser
+        {
+            UserName = "admin",
+            Email = "admin@example.com",
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(adminUser, "Admin@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+}
 
 app.UseCors("frontend");
 app.UseRouting();

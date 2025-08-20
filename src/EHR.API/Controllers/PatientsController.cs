@@ -3,12 +3,14 @@ using EHR.Application.DTOs;
 using EHR.Application.Interfaces;
 using EHR.Application.Parameters;
 using EHR.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace EHR.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class PatientsController : ControllerBase
@@ -18,6 +20,12 @@ namespace EHR.API.Controllers
         public PatientsController(IPatientService service)
         {
             _service = service;
+        }
+
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+            return Ok(User.Claims.Select(c => new { c.Type, c.Value }));
         }
 
         [HttpGet]

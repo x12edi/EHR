@@ -5,12 +5,14 @@ using EHR.Application.Interfaces;
 using EHR.Application.Parameters;
 using EHR.Application.Wrappers;
 using EHR.Domain.Entities;
-using EHR.Infrastructure.Repositories.Interfaces;
 using EHR.Infrastructure.Extensions;
+using EHR.Infrastructure.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace EHR.Application.Services
@@ -27,12 +29,21 @@ namespace EHR.Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _http;
 
-        public PatientService(IUnitOfWork unitOfWork, IMapper mapper)
+        public PatientService(IUnitOfWork unitOfWork, IMapper mapper, IHttpContextAccessor http)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _http = http;
         }
+
+        private string? CurrentUserId =>
+        _http.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        private string getFullName(string? first, string? middle, string? last) =>
+            string.Join(" ", new[] { first, middle, last }.Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s!.Trim()));
+
 
         public async Task<PagedResponse<PatientDto>> GetAllAsync(PaginationParameter pagination, string search = null, string sortBy = null, bool isAscending = true)
         {
@@ -78,6 +89,10 @@ namespace EHR.Application.Services
         public async Task<PatientDto> CreateAsync(CreatePatientDto dto)
         {
             var entity = _mapper.Map<Patient>(dto);
+            entity.FullNameNormalized = getFullName(dto.FirstName, dto.MiddleName, dto.LastName);
+            entity.CreatedAt = DateTime.UtcNow;
+            entity.CreatedBy = CurrentUserId;
+
             await _unitOfWork.Repository<Patient>().AddAsync(entity);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<PatientDto>(entity);
@@ -90,6 +105,9 @@ namespace EHR.Application.Services
                 throw new KeyNotFoundException("Patient not found.");
 
             _mapper.Map(dto, entity);
+            entity.FullNameNormalized = getFullName(dto.FirstName, dto.MiddleName, dto.LastName);
+            entity.UpdatedAt = DateTime.UtcNow;
+            entity.UpdatedBy = CurrentUserId;
             _unitOfWork.Repository<Patient>().Update(entity);
             await _unitOfWork.CommitAsync();
             return _mapper.Map<PatientDto>(entity);
