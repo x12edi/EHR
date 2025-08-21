@@ -20,6 +20,7 @@ namespace EHR.Application.Services
     public interface IPatientService
     {
         Task<PagedResponse<PatientDto>> GetAllAsync(PaginationParameter pagination, string search = null, string sortBy = null, bool isAscending = true);
+        Task<List<PatientDto>> SearchAsync(string search = null);
         Task<PatientDto> GetByIdAsync(Guid id);
         Task<PatientDto> CreateAsync(CreatePatientDto dto);
         Task<PatientDto> UpdateAsync(UpdatePatientDto dto);
@@ -78,6 +79,29 @@ namespace EHR.Application.Services
             var dtoItems = _mapper.Map<List<PatientDto>>(items);
 
             return new PagedResponse<PatientDto>(dtoItems, totalCount, pagination.PageNumber, pagination.PageSize);
+        }
+
+        public async Task<List<PatientDto>> SearchAsync(string search = null)
+        {
+            var query = _unitOfWork.Repository<Patient>().Query();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(p =>
+                    p.MRN.Contains(search) ||
+                    p.FirstName.Contains(search) ||
+                    p.LastName.Contains(search) ||
+                    p.Email.Contains(search)
+                );
+            }
+
+            var items = await query
+                .Take(21)
+                .ToListAsync();
+
+            var dtoItems = _mapper.Map<List<PatientDto>>(items);
+
+            return dtoItems;
         }
 
         public async Task<PatientDto> GetByIdAsync(Guid id)

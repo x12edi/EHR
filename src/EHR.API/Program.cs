@@ -28,9 +28,11 @@ builder.Services.AddDbContext<EhrDbContext>(options =>
                          sql => sql.EnableRetryOnFailure())
 );
 
-builder.Services.AddAutoMapper(typeof(PatientProfile).Assembly);
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPatientService, PatientService>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 
 // Generic + specific repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

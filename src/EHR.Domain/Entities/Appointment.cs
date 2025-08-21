@@ -18,7 +18,7 @@ namespace EHR.Domain.Entities
         public DateTimeOffset StartAt { get; set; }
         public DateTimeOffset EndAt { get; set; }
         public string Status { get; set; } // scheduled/checked-in/completed/cancelled
-        public string CancelReason { get; set; }
+        public string? CancelReason { get; set; }
         public DateTimeOffset? CheckInAt { get; set; }
         public DateTimeOffset? CheckOutAt { get; set; }
     }

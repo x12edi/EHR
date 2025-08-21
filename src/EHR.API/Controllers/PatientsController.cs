@@ -5,7 +5,9 @@ using EHR.Application.Parameters;
 using EHR.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace EHR.API.Controllers
@@ -32,6 +34,13 @@ namespace EHR.API.Controllers
         public async Task<IActionResult> GetAll([FromQuery] PaginationParameter pagination, string search = null, string sortBy = null, bool isAscending = true)
         {
             var result = await _service.GetAllAsync(pagination, search, sortBy, isAscending);
+            return Ok(result);
+        }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchPatients(string q)
+        {
+            var result = await _service.SearchAsync(q);
             return Ok(result);
         }
 

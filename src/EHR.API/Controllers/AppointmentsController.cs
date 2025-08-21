@@ -1,12 +1,14 @@
 ﻿using EHR.Application.DTOs;
 using EHR.Application.Parameters;
 using EHR.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 
 namespace EHR.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class AppointmentsController : ControllerBase
@@ -19,7 +21,7 @@ namespace EHR.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] PaginationParameter pagination, [FromQuery] string search, [FromQuery] string sortBy, [FromQuery] bool isAscending = true)
+        public async Task<IActionResult> GetAll([FromQuery] PaginationParameter pagination, [FromQuery] string search = null, [FromQuery] string sortBy = null, [FromQuery] bool isAscending = true)
         {
             var result = await _service.GetAllAsync(pagination, search, sortBy, isAscending);
             return Ok(result);
