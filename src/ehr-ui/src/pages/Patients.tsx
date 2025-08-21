@@ -105,15 +105,15 @@ export default function Patients() {
                     }
                 }}
                 columns={[
-                    { title: 'MRN', dataIndex: 'MRN', sorter: true },
-                    { title: 'First Name', dataIndex: 'FirstName', sorter: true },
-                    { title: 'Middle Name', dataIndex: 'MiddleName' },
-                    { title: 'Last Name', dataIndex: 'LastName', sorter: true },
-                    { title: 'DOB', dataIndex: 'DOB', sorter: true },
-                    { title: 'Gender', dataIndex: 'Gender', sorter: true },
-                    { title: 'Phone', dataIndex: 'PrimaryPhone' },
-                    { title: 'Email', dataIndex: 'Email' },
-                    { title: 'Language', dataIndex: 'PrimaryLanguage' },
+                    { title: 'MRN', dataIndex: 'mrn', sorter: true },
+                    { title: 'First Name', dataIndex: 'firstName', sorter: true },
+                    { title: 'Middle Name', dataIndex: 'middleName' },
+                    { title: 'Last Name', dataIndex: 'lastName', sorter: true },
+                    { title: 'DOB', dataIndex: 'dob', sorter: true },
+                    { title: 'Gender', dataIndex: 'gender', sorter: true },
+                    { title: 'Phone', dataIndex: 'primaryPhone' },
+                    { title: 'Email', dataIndex: 'email' },
+                    { title: 'Language', dataIndex: 'primaryLanguage' },
                     {
                         title: 'Actions',
                         render: (_, r) => (

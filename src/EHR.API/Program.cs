@@ -14,6 +14,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,7 +73,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Add controllers & JSON options
 builder.Services.AddControllers()
     .AddJsonOptions(opt => {
-        opt.JsonSerializerOptions.PropertyNamingPolicy = null;
+        opt.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
 
 // CORS for frontend

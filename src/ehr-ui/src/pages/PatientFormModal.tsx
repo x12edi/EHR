@@ -102,25 +102,25 @@ export default function PatientFormModal({ open, onClose, onSubmit, patient }: P
             okText={patient ? 'Save Changes' : 'Create'}
         >
             <Form form={form} layout="vertical">
-                <Form.Item name="MRN" label="MRN" rules={[{ required: true }]}>
+                <Form.Item name="mrn" label="MRN" rules={[{ required: true }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="FirstName" label="First Name" rules={[{ required: true }]}>
+                <Form.Item name="firstName" label="First Name" rules={[{ required: true }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="MiddleName" label="Middle Name">
+                <Form.Item name="middleName" label="Middle Name">
                     <Input />
                 </Form.Item>
-                <Form.Item name="LastName" label="Last Name" rules={[{ required: true }]}>
+                <Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="FullNameNormalized" label="Full Name Normalized">
+                <Form.Item name="fullNameNormalized" label="Full Name Normalized">
                     <Input />
                 </Form.Item>
-                <Form.Item name="DOB" label="Date of Birth">
+                <Form.Item name="dob" label="Date of Birth">
                     <DatePicker style={{ width: '100%' }} />
                 </Form.Item>
-                <Form.Item name="Gender" label="Gender" rules={[{ required: true }]}>
+                <Form.Item name="gender" label="Gender" rules={[{ required: true }]}>
                     <Select>
                         <Option value="Male">Male</Option>
                         <Option value="Female">Female</Option>
@@ -128,7 +128,7 @@ export default function PatientFormModal({ open, onClose, onSubmit, patient }: P
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    name="PrimaryPhone"
+                    name="primaryPhone"
                     label="Primary Phone"
                     rules={[
                         { required: true },
@@ -137,27 +137,27 @@ export default function PatientFormModal({ open, onClose, onSubmit, patient }: P
                 >
                     <Input placeholder="+911234567890" />
                 </Form.Item>
-                <Form.Item name="Email" label="Email" rules={[{ required: true, type: 'email' }]}>
+                <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item name="PrimaryLanguage" label="Primary Language">
+                <Form.Item name="primaryLanguage" label="Primary Language">
                     <Input />
                 </Form.Item>
 
                 {/* Upload field */}
-                <Form.Item name="PhotoUrl" label="Photo">
+                <Form.Item name="photoUrl" label="Photo">
                     <Upload {...uploadProps} listType="picture">
                         <Button icon={<UploadOutlined />}>Upload Photo</Button>
                     </Upload>
                 </Form.Item>
 
-                <Form.Item name="AddressesJson" label="Addresses (JSON)">
+                <Form.Item name="addressesJson" label="Addresses (JSON)">
                     <Input.TextArea rows={2} />
                 </Form.Item>
-                <Form.Item name="IdentifiersJson" label="Identifiers (JSON)">
+                <Form.Item name="identifiersJson" label="Identifiers (JSON)">
                     <Input.TextArea rows={2} />
                 </Form.Item>
-                <Form.Item name="DemographicsJson" label="Demographics (JSON)">
+                <Form.Item name="demographicsJson" label="Demographics (JSON)">
                     <Input.TextArea rows={2} />
                 </Form.Item>
             </Form>
