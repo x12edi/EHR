@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Space, Input, Popconfirm, message } from 'antd';
+import { Table, Button, Space, Input, Popconfirm, message, Segmented } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import type { Appointment } from '../services/appointmentService';
 import { appointmentService } from '../services/appointmentService';
 import AppointmentFormModal from './AppointmentFormModal';
+
+// FullCalendar imports
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
 
 export default function Appointments() {
     const [data, setData] = useState<Appointment[]>([]);
@@ -17,6 +23,8 @@ export default function Appointments() {
 
     const [modalOpen, setModalOpen] = useState(false);
     const [editing, setEditing] = useState<Appointment | null>(null);
+
+    const [viewMode, setViewMode] = useState<'table' | 'calendar'>('table');
 
     const load = async () => {
         setLoading(true);
@@ -80,58 +88,87 @@ export default function Appointments() {
                 >
                     Add Appointment
                 </Button>
+                <Segmented
+                    options={[
+                        { label: 'Table', value: 'table' },
+                        { label: 'Calendar', value: 'calendar' }
+                    ]}
+                    value={viewMode}
+                    onChange={(val) => setViewMode(val as 'table' | 'calendar')}
+                />
             </Space>
 
-            <Table<Appointment>
-                rowKey="id"
-                loading={loading}
-                dataSource={data}
-                pagination={{
-                    current: pageNumber,
-                    pageSize,
-                    total,
-                    showSizeChanger: true,
-                    onChange: (page, size) => {
-                        setPageNumber(page);
-                        setPageSize(size);
-                    }
-                }}
-                onChange={(pagination, filters, sorter: any) => {
-                    if (sorter?.field) {
-                        setSortBy(sorter.field);
-                        setIsAscending(sorter.order === 'ascend');
-                    } else {
-                        setSortBy(null);
-                    }
-                }}
-                columns={[
-                    { title: 'Patient', dataIndex: 'patientName', sorter: true },
-                    { title: 'Provider', dataIndex: 'providerName', sorter: true },
-                    { title: 'Department', dataIndex: 'departmentName', sorter: true },
-                    { title: 'Start', dataIndex: 'startAt', sorter: true },
-                    { title: 'End', dataIndex: 'endAt', sorter: true },
-                    { title: 'Status', dataIndex: 'status', sorter: true },
-                    {
-                        title: 'Actions',
-                        render: (_, r) => (
-                            <Space>
-                                <Button size="small" onClick={() => {
-                                    setEditing(r);
-                                    setModalOpen(true);
-                                }}>
-                                    Edit
-                                </Button>
-                                <Popconfirm
-                                    title="Delete this appointment?"
-                                    onConfirm={() => handleDelete(r.id)}
-                                >
-                                    <Button danger size="small">Delete</Button>
-                                </Popconfirm>
-                            </Space>
-                        ),
-                    },
-                ]}
-            />
+            {viewMode === 'table' ? (
+                <Table<Appointment>
+                    rowKey="id"
+                    loading={loading}
+                    dataSource={data}
+                    pagination={{
+                        current: pageNumber,
+                        pageSize,
+                        total,
+                        showSizeChanger: true,
+                        onChange: (page, size) => {
+                            setPageNumber(page);
+                            setPageSize(size);
+                        }
+                    }}
+                    onChange={(pagination, filters, sorter: any) => {
+                        if (sorter?.field) {
+                            setSortBy(sorter.field);
+                            setIsAscending(sorter.order === 'ascend');
+                        } else {
+                            setSortBy(null);
+                        }
+                    }}
+                    columns={[
+                        { title: 'Patient', dataIndex: 'patientName', sorter: true },
+                        { title: 'Provider', dataIndex: 'providerName', sorter: true },
+                        { title: 'Department', dataIndex: 'departmentName', sorter: true },
+                        { title: 'Start', dataIndex: 'startAt', sorter: true },
+                        { title: 'End', dataIndex: 'endAt', sorter: true },
+                        { title: 'Status', dataIndex: 'status', sorter: true },
+                        {
+                            title: 'Actions',
+                            render: (_, r) => (
+                                <Space>
+                                    <Button size="small" onClick={() => {
+                                        setEditing(r);
+                                        setModalOpen(true);
+                                    }}>
+                                        Edit
+                                    </Button>
+                                    <Popconfirm
+                                        title="Delete this appointment?"
+                                        onConfirm={() => handleDelete(r.id)}
+                                    >
+                                        <Button danger size="small">Delete</Button>
+                                    </Popconfirm>
+                                </Space>
+                            ),
+                        },
+                    ]}
+                />
+            ) : (
+                <FullCalendar
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                    initialView="dayGridMonth"
+                    height="80vh"
+                    events={data.map(a => ({
+                        id: a.id,
+                        title: `${a.patientName} (${a.status})`,
+                        start: a.startAt,
+                        end: a.endAt,
+                    }))}
+                    eventClick={(info) => {
+                        const appt = data.find(d => d.id === info.event.id);
+                        if (appt) {
+                            setEditing(appt);
+                            setModalOpen(true);
+                        }
+                    }}
+                />
+            )}
 
             <AppointmentFormModal
                 open={modalOpen}
