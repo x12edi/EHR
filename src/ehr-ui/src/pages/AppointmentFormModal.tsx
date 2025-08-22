@@ -21,6 +21,13 @@ export default function AppointmentFormModal({ open, onClose, onSubmit, appointm
                 startAt: dayjs(appointment.startAt),
                 endAt: dayjs(appointment.endAt),
             });
+
+            // Ensure the selected patient is loaded into the dropdown
+            (async () => {
+                const patientRes = await lookupService.getPatientById(appointment.patientId);
+                setPatients([patientRes]); // Populate with just the current patient
+            })();
+
         } else {
             form.resetFields();
         }
@@ -74,6 +81,12 @@ export default function AppointmentFormModal({ open, onClose, onSubmit, appointm
                         allowClear
                         options={departments.map(d => ({ label: d.name, value: d.id }))}
                     />
+                </Form.Item>
+                <Form.Item name="providerId" label="Created By" hidden>
+                    
+                </Form.Item>
+                <Form.Item name="providerName" label="Created By">
+                    <Input disabled></Input>
                 </Form.Item>
                 <Form.Item name="startAt" label="Start At" rules={[{ required: true }]}>
                     <DatePicker showTime style={{ width: '100%' }} />

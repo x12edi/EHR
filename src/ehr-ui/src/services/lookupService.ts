@@ -6,6 +6,11 @@ export const lookupService = {
         return res.data; // [{ id, name }]
     },
 
+    async getPatientById(id: string) {
+        const res = await api.get(`/patients/${id}`);
+        return res.data; // [{ id, name }]
+    },
+
     async getDepartments() {
         const res = await api.get('/departments');
         return res.data.data; // [{ id, name }]
