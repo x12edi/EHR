@@ -1,12 +1,14 @@
 ﻿// EHR.Domain.Entities/User.cs
 using EHR.Domain.Common;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EHR.Domain.Entities
 {
     // Maps to IdentityServer / AspNetUsers row; keep profile extension here
     public class User : AuditableEntity
     {
+        [NotMapped]
         public string SubjectId { get; set; }  // maps to IdentityServer / Auth0 / Okta ID
 
         public string Username { get; set; }

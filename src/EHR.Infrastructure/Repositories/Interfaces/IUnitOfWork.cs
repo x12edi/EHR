@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using EHR.Infrastructure.Persistence;
+using System.Threading.Tasks;
 
 namespace EHR.Infrastructure.Repositories.Interfaces
 {
@@ -34,7 +35,7 @@ namespace EHR.Infrastructure.Repositories.Interfaces
         //IScheduleSlotRepository ScheduleSlots { get; }
         //ITenantRepository Tenants { get; }
         //IUserRepository Users { get; }
-        
+        EhrDbContext Context { get; }
         IRepository<T> Repository<T>() where T : class;
         Task<int> CommitAsync();
 

@@ -40,6 +40,7 @@ namespace EHR.Infrastructure.Repositories.Implementations
         //public ITenantRepository Tenants { get; }
         //public IUserRepository Users { get; }
 
+        public EhrDbContext Context { get { return _context; } }
         public UnitOfWork(EhrDbContext context,IServiceProvider serviceProvider)
         {
             _context = context;

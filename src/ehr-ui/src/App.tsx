@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import DashboardLayout from './pages/DashboardLayout';
 import Patients from './pages/Patients';
 import Appointments from './pages/Appointments';
+import Providers from './pages/Providers';
 
 export default function App() {
     return (
@@ -18,6 +19,7 @@ export default function App() {
                     <Route path="dashboard" element={<div>Welcome to Dashboard</div>} />
                     <Route path="patients" element={<Patients />} />
                     <Route path="appointments" element={<Appointments />} />
+                    <Route path="providers" element={<Providers/>} />
                 </Route>
 
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />

@@ -23,6 +23,7 @@ export default function DashboardLayout() {
                         { key: '/dashboard', label: 'Home' },
                         { key: '/patients', label: 'Patients' },
                         { key: '/appointments', label: 'Appointments' },
+                        { key: '/providers', label: 'Providers' },
                     ]}
                 />
             </Sider>

@@ -33,6 +33,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IProviderService, ProviderService>();
 
 // Generic + specific repositories
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
