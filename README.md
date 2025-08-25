@@ -9,7 +9,7 @@ A modular **Electronic Health Record (EHR)** platform built with:
 
 ---
 
-## 📌 Features (Work in Progress)  
+## Features (Work in Progress)  
 
 **Patient Management**  
 - Create, edit, delete patients  
