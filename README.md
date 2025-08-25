@@ -7,8 +7,6 @@ A modular **Electronic Health Record (EHR)** platform built with:
 - **Authentication**: ASP.NET Identity + JWT  
 - **Architecture**: Clean architecture with DTOs, Services, Controllers, and layered separation  
 
----
-
 ## Features (Work in Progress)  
 
 **Patient Management**  
@@ -28,8 +26,6 @@ A modular **Electronic Health Record (EHR)** platform built with:
 - Encounters  
 - Departments & Locations  
 - Billing & Diagnostics  
-
----
 
 ## Tech Stack  
 
